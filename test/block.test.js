@@ -1,4 +1,4 @@
-const Block = require('../src/block');
+const Block = require('../src/blockchain/block');
 
 describe('Block', () => {
 
