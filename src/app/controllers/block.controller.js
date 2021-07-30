@@ -1,20 +1,26 @@
-const Blockchain = require('../../blockchain/index')
-const bc = new Blockchain();
-
 class BlockController {
 
-    findBlocks(req, res) {
+    constructor(blockchain, Server) {
 
-        res.status(200).json(bc.chain);
+        this.blockchain = blockchain;
+        this.p2pServer = Server;
+    }
+    // Para que não haja problema de escopo com o this, os métodos seguem 
+    // sendo arrow functions.
+    findBlocks = (req, res) => {
+
+         res.status(200).json(this.blockchain.chain);
     }
 
-    mineBlock(req, res) {
+    mineBlock = (req, res) => {
         let blockData = req.body;
 
-        bc.addBlock(blockData);
+        this.blockchain.addBlock(blockData);
+        this.p2pServer.syncChain();
 
-        res.status(200).json({message: 'Block created successfully'});
+        
+        res.status(200).json({ message: 'Block created successfully' });
     }
 }
 
-module.exports = new BlockController();
+module.exports = BlockController;
